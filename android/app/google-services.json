@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "94095175396",
+    "project_id": "second-project-ff313",
+    "storage_bucket": "second-project-ff313.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94095175396:android:3e3b2f9ff548afde2bc6f1",
+        "android_client_info": {
+          "package_name": "com.example.cucumber_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "94095175396-b0ia6db1qjlc02pmtor6sujk5d87mmdp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhwcYtHJHSsdJMTaVDifn8grTdsBwVvdw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "94095175396-b0ia6db1qjlc02pmtor6sujk5d87mmdp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
