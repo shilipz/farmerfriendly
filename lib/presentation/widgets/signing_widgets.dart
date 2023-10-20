@@ -1,28 +1,45 @@
-import 'dart:developer';
-
 import 'package:cucumber_app/presentation/views/contact_details.dart';
+import 'package:cucumber_app/presentation/views/home/home_screen.dart';
 import 'package:cucumber_app/presentation/views/home_screen.dart';
-import 'package:cucumber_app/presentation/views/login.dart';
-import 'package:cucumber_app/presentation/views/splash_screen.dart';
-import 'package:cucumber_app/utils/authorisation.dart';
+import 'package:cucumber_app/utils/authentication.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../main.dart';
 
 class Forms extends StatelessWidget {
   final String loginText;
-  final TextEditingController? controller;
-  const Forms({required this.loginText, this.controller, Key? key})
+  final TextEditingController? inputController;
+  final String? Function(String?)? customValidator;
+  final bool? obscureText;
+  FocusNode? focusNode;
+  Forms(
+      {this.customValidator,
+      required this.loginText,
+      this.inputController,
+      Key? key,
+      this.focusNode,
+      this.obscureText})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 300,
+      // width: 300,
       height: 50,
       child: TextFormField(
-        controller: controller,
+        validator: (value) {
+          if (customValidator != null) {
+            final customError = customValidator!(value);
+            if (customError != null) {
+              return customError;
+            }
+          }
+          return null;
+        },
+        obscureText: obscureText ?? false,
+        controller: inputController,
         decoration: InputDecoration(
           hintText: loginText,
           hintStyle: const TextStyle(color: hintcolor),
@@ -49,13 +66,13 @@ class Forms extends StatelessWidget {
 
 class SignUpButton extends StatelessWidget {
   final String buttonText;
-  final String password;
-  final String email;
+  final Color? buttonColor;
+  final Function()? onPressed;
   const SignUpButton(
       {required this.buttonText,
       super.key,
-      required this.password,
-      required this.email});
+      required this.onPressed,
+      this.buttonColor});
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +80,7 @@ class SignUpButton extends StatelessWidget {
       width: 300,
       height: 50,
       child: ElevatedButton(
-        onPressed: () async {
-          await signUp(email, password);
-        },
+        onPressed: onPressed,
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(lightgreen),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -101,7 +116,7 @@ class SignInCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: Container(
         width: screenWidth * 0.9,
-        height: screenHeight * 0.20,
+        // height: screenHeight * 0.2,
         decoration: const BoxDecoration(color: Colors.white),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -109,8 +124,8 @@ class SignInCard extends StatelessWidget {
             // Text(cardtext, style: TextStyle(fontSize: 20, color: darkgreen)),
             TextButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const FarmReg()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ContactDetails()));
                 },
                 child: Text(cardtext,
                     style: const TextStyle(fontSize: 20, color: darkgreen))),
@@ -129,14 +144,11 @@ class Arrowback extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-        child: Padding(
-      padding: const EdgeInsets.all(17),
-      child: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_ios, size: 25, color: backcolor)),
-    ));
+        child: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios, size: 25, color: backcolor)));
   }
 }
 
@@ -160,7 +172,7 @@ class LoginButton extends StatelessWidget {
           if (FirebaseAuth.instance.currentUser != null) {
             await signIn(email, password);
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => Home(),
+              builder: (context) => const Home(),
             ));
           }
         },
@@ -176,5 +188,19 @@ class LoginButton extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class LoginHeading extends StatelessWidget {
+  final String signingText;
+  final Color textcolor;
+  LoginHeading({super.key, required this.signingText, required this.textcolor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(signingText,
+        style: GoogleFonts.playfairDisplay(
+            textStyle: TextStyle(
+                color: textcolor, fontSize: 36, fontWeight: FontWeight.bold)));
   }
 }

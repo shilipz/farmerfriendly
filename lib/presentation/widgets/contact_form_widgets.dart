@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../main.dart';
 import '../../utils/constants/constants.dart';
 
 class ContactForm extends StatelessWidget {
   final String? formHints;
-
-  const ContactForm({this.formHints, super.key});
+  final TextEditingController? inputController;
+  final String? Function(String?)? customValidator;
+  final Color? nameBorder;
+  const ContactForm(
+      {this.formHints,
+      super.key,
+      this.inputController,
+      this.customValidator,
+      this.nameBorder});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +22,16 @@ class ContactForm extends StatelessWidget {
       width: 300,
       height: 50,
       child: TextFormField(
+        validator: (value) {
+          if (customValidator != null) {
+            final customError = customValidator!(value);
+            if (customError != null) {
+              return customError;
+            }
+          }
+          return null;
+        },
+        controller: inputController,
         decoration: InputDecoration(
           hintText: formHints,
           hintStyle: const TextStyle(color: Colors.white),
@@ -38,7 +56,12 @@ class ContactForm extends StatelessWidget {
 class Next extends StatelessWidget {
   final String buttonText;
   final Color buttonColor;
-  const Next({required this.buttonText, required this.buttonColor, super.key});
+  final Function()? onPressed;
+  const Next(
+      {required this.buttonText,
+      required this.buttonColor,
+      super.key,
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +70,7 @@ class Next extends StatelessWidget {
         width: 90,
         height: 40,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: onPressed,
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(buttonColor),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -56,7 +79,7 @@ class Next extends StatelessWidget {
               ))),
           child: Text(
             buttonText,
-            style: TextStyle(fontSize: 18, color: kwhite),
+            style: const TextStyle(fontSize: 18, color: kwhite),
           ),
         ),
       ),
@@ -73,11 +96,12 @@ class Captions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(50),
-      child: Text(
-        captions,
-        style: TextStyle(color: captionColor, fontSize: screenWidth * 0.065),
-      ),
-    );
+        padding: const EdgeInsets.only(left: 50, right: 50),
+        child: Text(captions,
+            style: GoogleFonts.playfairDisplay(
+                textStyle: TextStyle(
+                    color: captionColor,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold))));
   }
 }
