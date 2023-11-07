@@ -1,6 +1,5 @@
-import 'package:cucumber_app/presentation/views/contact_details.dart';
+import 'package:cucumber_app/presentation/views/contact_details/contact_details.dart';
 import 'package:cucumber_app/presentation/views/home/home_screen.dart';
-import 'package:cucumber_app/presentation/views/home_screen.dart';
 import 'package:cucumber_app/utils/authentication.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../main.dart';
 
+// ignore: must_be_immutable
 class Forms extends StatelessWidget {
   final String loginText;
   final TextEditingController? inputController;
@@ -26,7 +26,6 @@ class Forms extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      // width: 300,
       height: 50,
       child: TextFormField(
         validator: (value) {
@@ -143,12 +142,11 @@ class Arrowback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-        child: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back_ios, size: 25, color: backcolor)));
+    return IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: Icon(Icons.arrow_back_ios, size: 25, color: backcolor));
   }
 }
 

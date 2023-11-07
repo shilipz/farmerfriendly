@@ -1,4 +1,3 @@
-
 import 'package:cucumber_app/presentation/views/product/products_info.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +5,14 @@ import 'package:flutter/material.dart';
 class SaleItem extends StatefulWidget {
   final String name;
   final int price;
+  // final int quantity;
 
-  const SaleItem({super.key, required this.name, required this.price});
+  const SaleItem({
+    super.key,
+    required this.name,
+    required this.price,
+    // required this.quantity
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -15,8 +20,6 @@ class SaleItem extends StatefulWidget {
 }
 
 class _SaleItemState extends State<SaleItem> {
-  bool isOnSale = false;
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -32,33 +35,24 @@ class _SaleItemState extends State<SaleItem> {
         trailing: ElevatedButton(
           onPressed: () {
             setState(() {
-              isOnSale = !isOnSale;
               // _addVegetableToFirestore(context, widget.name);
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProductDetails(
-                  vegetableName: widget.name,
                   vegetablePrice: widget.price,
+                  vegetableName: widget.name,
                 ),
               ));
             });
-            // String buttonText = isOnSale ? 'In Sale Now' : 'not for Sale';
-            // Color buttonColor = isOnSale ? Colors.green : homeorange;
-            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            //   content:
-            //       Text('Item is ${isOnSale ? 'in sales now' : 'not for sale'}'),
-            //   backgroundColor: buttonColor,
-            // ));
           },
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(
-                isOnSale ? Colors.green : homeorange),
+            backgroundColor: MaterialStateProperty.all<Color>(homeorange),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
               ),
             ),
           ),
-          child: Text(isOnSale ? 'In Sale Now' : 'Ready to Sale'),
+          child: Text('Add to Sale'),
         ),
       ),
     );

@@ -15,11 +15,13 @@ enum DayOfWeek {
 class QuantityButton extends StatelessWidget {
   final IconData? quantityIcon;
   final String? buttonText;
+  final Function()? onpressed;
 
   const QuantityButton({
     this.buttonText,
     this.quantityIcon,
     Key? key,
+    this.onpressed,
   }) : super(key: key);
 
   @override
@@ -33,7 +35,7 @@ class QuantityButton extends StatelessWidget {
             height: 40,
             color: transOrange,
             child: IconButton(
-              onPressed: () {},
+              onPressed: onpressed,
               icon: Icon(
                 quantityIcon, // Default icon is Icons.add
                 color: kblack,

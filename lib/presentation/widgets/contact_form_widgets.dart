@@ -95,13 +95,11 @@ class Captions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.only(left: 50, right: 50),
-        child: Text(captions,
-            style: GoogleFonts.playfairDisplay(
-                textStyle: TextStyle(
-                    color: captionColor,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold))));
+    return Text(captions,
+        style: GoogleFonts.playfairDisplay(
+            textStyle: TextStyle(
+                color: captionColor,
+                fontSize: 28,
+                fontWeight: FontWeight.bold)));
   }
 }

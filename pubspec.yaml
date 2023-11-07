@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  animated_bottom_navigation_bar: ^1.3.0
   bloc: ^8.1.2
   cloud_firestore: ^4.9.1
   cupertino_icons: ^1.0.2
@@ -39,9 +40,13 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.3
   font_awesome_flutter: ^10.5.0
+  geolocator: ^10.1.0
   google_fonts: ^6.1.0
   google_maps_flutter: ^2.5.0
+  intl: ^0.18.1
+  rive: ^0.11.17
   table_calendar: ^3.0.9
+  url_launcher: ^6.2.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0

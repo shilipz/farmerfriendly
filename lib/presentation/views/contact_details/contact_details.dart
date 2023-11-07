@@ -1,22 +1,26 @@
+import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cucumber_app/main.dart';
-import 'package:cucumber_app/presentation/views/map.dart';
+import 'package:cucumber_app/presentation/views/contact_details/current_location.dart';
+import 'package:cucumber_app/presentation/views/contact_details/location.dart';
 import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
 import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ContactDetails extends StatelessWidget {
+class ContactDetails extends StatefulWidget {
   ContactDetails({super.key});
+
+  @override
+  State<ContactDetails> createState() => _ContactDetailsState();
+}
+
+class _ContactDetailsState extends State<ContactDetails> {
   final _formkey = GlobalKey<FormState>();
+
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
-
-  // ... Your other variables and methods
-
-  void _showSnackBar(String message) {
-    final snackBar = SnackBar(content: Text(message));
-    _scaffoldKey.currentState!.showSnackBar(snackBar);
-  }
 
   String? validateFullName(String? value) {
     if (value == null || value.isEmpty) {
@@ -59,11 +63,28 @@ class ContactDetails extends StatelessWidget {
   }
 
   final TextEditingController nameController = TextEditingController();
+
   final TextEditingController phoneNumberController = TextEditingController();
+
   final TextEditingController farmNameController = TextEditingController();
+
   final TextEditingController streetNameController = TextEditingController();
+
   final TextEditingController landMarkController = TextEditingController();
+
   final TextEditingController pincodeController = TextEditingController();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    phoneNumberController.dispose();
+    farmNameController.dispose();
+    streetNameController.dispose();
+    pincodeController.dispose();
+    nameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -72,7 +93,6 @@ class ContactDetails extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              // Image.asset('assets/reg.jpg'),
               Padding(
                 padding: EdgeInsets.only(right: screenWidth * 0.8),
                 child: const Arrowback(backcolor: darkgreen),
@@ -113,8 +133,6 @@ class ContactDetails extends StatelessWidget {
                             customValidator: validatePhoneNumber,
                             formHints: 'Contact Number'),
                         sheight,
-                        // const ContactForm(formHints: 'Email Id'),
-                        // sheight,
                         const Text('Address for Collection',
                             style: TextStyle(fontSize: 18, color: darkgreen)),
                         sheight,
@@ -140,11 +158,19 @@ class ContactDetails extends StatelessWidget {
                         const Text('also pin your location on map',
                             style: TextStyle(fontSize: 18, color: darkgreen)),
                         SizedBox(height: screenHeight * 0.01),
+                        Next(
+                            onPressed: () {
+                              if (_formkey.currentState!.validate()) {
+                                return addUserDetails(context);
+                              }
+                            },
+                            buttonText: 'Save',
+                            buttonColor: darkgreen),
                         Center(
                           child: IconButton(
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const MapSample(),
+                                  builder: (context) => const CurrentLocation(),
                                 ));
                               },
                               icon: const Icon(
@@ -163,5 +189,56 @@ class ContactDetails extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> addUserDetails(BuildContext context) async {
+    log('1');
+    // UserModel userModel = UserModel(
+    //     fullName: formatText(nameController.text),
+    //     phoneNumber: formatText(phoneNumberController.text),
+    //     houseName: formatText(farmNameController.text),
+    //     streetName: formatText(streetNameController.text),
+    //     landmark: formatText(landMarkController.text));
+    User? user = FirebaseAuth.instance.currentUser;
+    // final details =
+    //     FirebaseFirestore.instance.collection('users').doc(user!.uid);
+    // details.add(userModel.toMap());
+
+    String fullName = formatText(nameController.text);
+    String phoneNumber = formatText(phoneNumberController.text);
+    String houseName = formatText(farmNameController.text);
+    String streetName = formatText(streetNameController.text);
+    String landmark = formatText(landMarkController.text);
+    // var pincode = pincodeController;
+
+    // Map<String, dynamic> userMap = userModel.toMap();
+
+    // Update the Firestore document with the user's data
+    // await FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(user!.uid)
+    //     .set(userMap, SetOptions(merge: true));
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .collection('contact_details')
+        .doc()
+        .set({
+      'fullname': fullName,
+      'phoneNumber': phoneNumber,
+      'houseName': houseName,
+      'streetName': streetName,
+      'landmark': landmark,
+      // 'pincode': pincode,
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Contact details saved successfully')));
+  }
+
+  String formatText(String text) {
+    if (text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
   }
 }

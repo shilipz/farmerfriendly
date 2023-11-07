@@ -1,13 +1,16 @@
 import 'dart:developer';
 
+import 'package:cucumber_app/domain/models/user_model.dart';
 import 'package:cucumber_app/domain/repositories/auth.dart';
-import 'package:cucumber_app/presentation/views/login.dart';
+import 'package:cucumber_app/main.dart';
+
+import 'package:cucumber_app/presentation/views/signing/login.dart';
+import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
+import 'package:cucumber_app/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../main.dart';
-import '../../utils/constants/constants.dart';
-import '../widgets/signing_widgets.dart';
+import 'package:rive/rive.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key, this.customValidator});
@@ -107,13 +110,25 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 
+  showLoading(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const RiveAnimation.asset(
+            'assets/511-976-dot-loading-loaders.riv');
+      },
+    );
+  }
+
   Future<void> _signup(BuildContext context) async {
-    String email = emailController.text;
-    String password = passwordController.text;
-    String username = _capitalizeFirstLetter(
-        usernameController.text); // Capitalize the first letter of the username
-    User? user =
-        await _auth.signUpWithEmailAndPassword(email, password, username);
+    UserModel userModel = UserModel(
+        email: emailController.text,
+        password: passwordController.text,
+        username: _capitalizeFirstLetter(usernameController.text));
+
+    showLoading(context);
+
+    User? user = await _auth.signUpWithEmailAndPassword(userModel);
 
     if (user != null) {
       log("User is successfully created");

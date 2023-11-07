@@ -1,11 +1,14 @@
 import 'dart:developer';
 
+import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
+import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Approvals extends StatefulWidget {
-  Approvals({Key? key}) : super(key: key);
+  const Approvals({Key? key}) : super(key: key);
 
   @override
   State<Approvals> createState() => _ApprovalsState();
@@ -24,13 +27,20 @@ class _ApprovalsState extends State<Approvals> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Center(
-                child: Text(
-                  'Add new Veggie',
-                  style: TextStyle(fontSize: 22),
-                ),
+              const Row(
+                children: [
+                  Arrowback(backcolor: darkgreen),
+                  Captions(captionColor: darkgreen, captions: 'Add new Veggie'),
+                ],
               ),
               lheight,
+              CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.grey,
+                child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.image, color: Colors.white)),
+              ),
               lheight,
               TextFormField(
                 controller: nameController,
@@ -74,27 +84,61 @@ class _ApprovalsState extends State<Approvals> {
   }
 
   void _submit() async {
-    String name = nameController.text;
+    String name = formatText(nameController.text);
     String price = priceController.text;
 
-    log("1");
-    // Get the current user
+    User? user = FirebaseAuth.instance.currentUser;
 
     final pending =
         FirebaseFirestore.instance.collection('pending_approval').doc();
-    log("2");
-    await pending.set({
-      'name': name,
-      'price': double.parse(price),
-      'status': 'pending',
-      'id': pending.id
+    CollectionReference pendingRef =
+        FirebaseFirestore.instance.collection('pending_approval');
+
+    final email = FirebaseAuth.instance.currentUser!.email;
+    CollectionReference vegRef =
+        FirebaseFirestore.instance.collection('vegetables');
+    QuerySnapshot vegQuerySnapshot =
+        await vegRef.where('name', isEqualTo: name).get();
+    vegRef
+        .where('name', isEqualTo: name)
+        .get()
+        .then((QuerySnapshot vegQuerySnapshot) async {
+      if (vegQuerySnapshot.docs.isNotEmpty) {
+        return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('$name is already available for sale')));
+      } else {
+        QuerySnapshot pendingQuerySnapshot =
+            await pendingRef.where('name', isEqualTo: name).get();
+        if (pendingQuerySnapshot.docs.isNotEmpty) {
+          return ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              backgroundColor: Colors.red,
+              content: Text('This vegetable is already under review')));
+        }
+        await pending.set({
+          'name': name,
+          'price': double.parse(price),
+          'status': 'pending',
+          'id': pending.id,
+          'email': email,
+          'username': user!.displayName,
+        });
+        nameController.clear();
+        priceController.clear();
+        log("3");
+        Navigator.of(context).pop();
+
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: darkgreen,
+            content: Text('Vegetable requested for approval.')));
+      }
     });
-    log("3");
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: const Text('Vegetable added. It is pending approval.'),
-    ));
-    nameController.clear();
-    priceController.clear();
-    Navigator.of(context).pop();
+  }
+
+  String formatText(String text) {
+    if (text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
   }
 }

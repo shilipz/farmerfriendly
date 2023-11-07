@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cucumber_app/domain/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 // /---------------signUp---------------------------
@@ -10,26 +11,22 @@ class FirebaseAuthServices {
   final CollectionReference _usersCollection =
       FirebaseFirestore.instance.collection('users');
 
-  // ... other methods ...
-
-  Future<User?> signUpWithEmailAndPassword(
-      String email, String password, String username) async {
+  Future<User?> signUpWithEmailAndPassword(UserModel userModel) async {
     try {
       UserCredential userCredential =
           await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
+        email: userModel.email!,
+        password: userModel.password!,
       );
 
       User? user = userCredential.user;
 
       if (user != null) {
-        // Store user details in Firestore collection 'users'
         await _usersCollection.doc(user.uid).set({
-          'email': email,
-          'username': username,
-          // Add more user details as needed
+          'email': userModel.email,
+          'username': userModel.username,
         });
+        await setDisplayName(userModel.username!);
       }
 
       return user;
@@ -39,6 +36,18 @@ class FirebaseAuthServices {
     }
   }
 
+  Future<void> setDisplayName(String displayName) async {
+    try {
+      User? user = _firebaseAuth.currentUser;
+
+      if (user != null) {
+        await user.updateDisplayName(displayName);
+        await _usersCollection.doc(user.uid).update({'username': displayName});
+      }
+    } catch (e) {
+      log('Error setting display name: $e');
+    }
+  }
   // ... other methods ...
 
 // ---------------signIn---------------------------------------

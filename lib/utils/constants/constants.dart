@@ -14,3 +14,4 @@ const kwhite = Colors.white;
 final sheight = SizedBox(height: screenHeight * 0.02);
 final lheight = SizedBox(height: screenHeight * 0.04);
 const homeorange = Color.fromRGBO(242, 170, 74, 1);
+final vlheight = SizedBox(height: screenHeight * 2);

@@ -1,14 +1,13 @@
 import 'dart:developer';
-
 import 'package:cucumber_app/domain/repositories/auth.dart';
 import 'package:cucumber_app/main.dart';
 import 'package:cucumber_app/presentation/views/home/home_screen.dart';
-import 'package:cucumber_app/presentation/views/home_screen.dart';
-import 'package:cucumber_app/presentation/views/sign_up.dart';
+import 'package:cucumber_app/presentation/views/signing/sign_up.dart';
 import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rive/rive.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
@@ -47,7 +46,7 @@ class Login extends StatelessWidget {
                     left: screenWidth * 0.13),
                 child: Column(children: [
                   Forms(
-                    loginText: 'Username',
+                    loginText: 'Email',
                     inputController: emailController,
                   ),
                   SizedBox(height: screenHeight * 0.05),
@@ -59,7 +58,8 @@ class Login extends StatelessWidget {
                   SignUpButton(
                     buttonText: 'Login',
                     onPressed: () {
-                      _signin(context);
+                      _signin(context, emailController.text,
+                          passwordController.text);
                     },
                   ),
                   SizedBox(height: screenHeight * 0.015),
@@ -91,9 +91,19 @@ class Login extends StatelessWidget {
     );
   }
 
-  Future<void> _signin(BuildContext context) async {
-    String email = emailController.text;
-    String password = passwordController.text;
+  showLoading(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const RiveAnimation.asset(
+            'assets/511-976-dot-loading-loaders.riv');
+      },
+    );
+  }
+
+  Future<void> _signin(
+      BuildContext context, String email, String password) async {
+    showLoading(context);
 
     try {
       User? user = await _auth.signInWithEmailAndPassword(email, password);
@@ -106,11 +116,18 @@ class Login extends StatelessWidget {
           ),
           (route) => false,
         );
+      } else if (emailController.text.isEmpty ||
+          passwordController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text("Please fill email and password fields")));
+        Navigator.of(context).pop();
       } else {
-        const AlertDialog(
-          title: Text("Usename and Password doesn't match"),
-        );
-        log("User is null - some error happened");
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: Colors.orange,
+            content: Text("Usename and Password doesn't match")));
+        Navigator.of(context).pop();
+        // log("User is null - some error happened");
       }
     } catch (e) {
       log("Sign-in error: $e");

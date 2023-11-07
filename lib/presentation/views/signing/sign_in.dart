@@ -1,7 +1,7 @@
+import 'package:cucumber_app/main.dart';
+import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
-import '../../main.dart';
-import '../widgets/signing_widgets.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
