@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:cucumber_app/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 

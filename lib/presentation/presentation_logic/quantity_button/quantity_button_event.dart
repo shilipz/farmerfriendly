@@ -1,12 +1,11 @@
 part of 'quantity_button_bloc.dart';
 
-class QuantityButtonEvent extends Equatable {
+class QuantityButtonEvent  {
   const QuantityButtonEvent();
 
-  @override
-  List<Object> get props => [];
+  
 }
 
-class Increment extends QuantityButtonEvent {}
+class IncreaseQuantity extends QuantityButtonEvent {}
 
-class Decrement extends QuantityButtonEvent {}
+class DecreaseQuantity extends QuantityButtonEvent {}

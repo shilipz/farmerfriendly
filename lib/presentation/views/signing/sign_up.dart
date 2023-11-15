@@ -1,24 +1,48 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
-import 'package:cucumber_app/domain/models/user_model.dart';
-import 'package:cucumber_app/domain/repositories/auth.dart';
-import 'package:cucumber_app/main.dart';
-
-import 'package:cucumber_app/presentation/views/signing/login.dart';
-import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rive/rive.dart';
 
-class SignUpScreen extends StatelessWidget {
-  SignUpScreen({super.key, this.customValidator});
-  final FirebaseAuthServices _auth = FirebaseAuthServices();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController usernameController = TextEditingController();
+import 'package:cucumber_app/domain/models/user_model.dart';
+import 'package:cucumber_app/domain/repositories/auth.dart';
+import 'package:cucumber_app/main.dart';
+import 'package:cucumber_app/presentation/views/contact_details/contact_details.dart';
+import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
+import 'package:cucumber_app/utils/constants/constants.dart';
+
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({
+    Key? key,
+    this.customValidator,
+  }) : super(key: key);
   final String? Function(String?)? customValidator;
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final FirebaseAuthServices _auth = FirebaseAuthServices();
+
+  final TextEditingController emailController = TextEditingController();
+
+  final TextEditingController passwordController = TextEditingController();
+
+  final TextEditingController usernameController = TextEditingController();
+  @override
+  void dispose() {
+    // Dispose the controllers when they are no longer needed to prevent memory leaks
+    emailController.dispose();
+    passwordController.dispose();
+    usernameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -35,7 +59,7 @@ class SignUpScreen extends StatelessWidget {
               ),
             ),
             lheight,
-            LoginHeading(
+            const LoginHeading(
               signingText: 'Sign Up',
               textcolor: darkgreen,
             ),
@@ -47,13 +71,13 @@ class SignUpScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        // width: 300,
                         height: 50,
                         child: TextFormField(
                           textCapitalization: TextCapitalization.words,
                           validator: (value) {
-                            if (customValidator != null) {
-                              final customError = customValidator!(value);
+                            if (widget.customValidator != null) {
+                              final customError =
+                                  widget.customValidator!(value);
                               if (customError != null) {
                                 return customError;
                               }
@@ -133,10 +157,20 @@ class SignUpScreen extends StatelessWidget {
     if (user != null) {
       log("User is successfully created");
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Login(),
+        builder: (context) => const ContactDetails(),
       ));
+    } else if (emailController.text.isEmpty ||
+        passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Please fill all fields")));
+      Navigator.of(context).pop();
     } else {
-      log("some error happened");
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.orange,
+          content: Text("Something went wrong")));
+      Navigator.of(context).pop();
+      // log("User is null - some error happened");
     }
   }
 

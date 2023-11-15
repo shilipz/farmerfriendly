@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cucumber_app/presentation/views/contact_details/contact_details.dart';
 import 'package:cucumber_app/presentation/views/home/home_screen.dart';
 import 'package:cucumber_app/utils/authentication.dart';
@@ -124,7 +126,7 @@ class SignInCard extends StatelessWidget {
             TextButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ContactDetails()));
+                      builder: (context) => const ContactDetails()));
                 },
                 child: Text(cardtext,
                     style: const TextStyle(fontSize: 20, color: darkgreen))),
@@ -192,7 +194,8 @@ class LoginButton extends StatelessWidget {
 class LoginHeading extends StatelessWidget {
   final String signingText;
   final Color textcolor;
-  LoginHeading({super.key, required this.signingText, required this.textcolor});
+  const LoginHeading(
+      {super.key, required this.signingText, required this.textcolor});
 
   @override
   Widget build(BuildContext context) {

@@ -37,19 +37,14 @@ class Home extends StatelessWidget {
           children: [
             Positioned.fill(
                 child: Image.asset('assets/signin.png', fit: BoxFit.fill)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                    color: kwhite,
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const SettingScreen(),
-                      ));
-                    },
-                    icon: const Icon(Icons.settings, size: 32))
-              ],
-            ),
+            IconButton(
+                color: kwhite,
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const SettingScreen(),
+                  ));
+                },
+                icon: const Icon(Icons.settings, size: 32)),
             FutureBuilder<UserModel>(
               future: _getUserData(user!.uid),
               builder: (context, snapshot) {
@@ -73,6 +68,7 @@ class Home extends StatelessWidget {
                             captions: '$greeting , $username'),
                       ),
                       const MainSreensNav(),
+                      lheight
                     ],
                   );
                 }

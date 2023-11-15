@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'package:cucumber_app/domain/repositories/auth.dart';
 import 'package:cucumber_app/main.dart';
@@ -9,11 +11,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
-class Login extends StatelessWidget {
-  Login({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   final FirebaseAuthServices _auth = FirebaseAuthServices();
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -35,7 +52,7 @@ class Login extends StatelessWidget {
               Positioned(
                   top: screenHeight * 0.13,
                   left: screenWidth * 0.25,
-                  child: LoginHeading(
+                  child: const LoginHeading(
                     signingText: 'Cucumber',
                     textcolor: kwhite,
                   )),
@@ -110,7 +127,7 @@ class Login extends StatelessWidget {
 
       if (user != null) {
         log("User is successfully signed in");
-        Navigator.of(context).pushAndRemoveUntil(
+        navigatorKey.currentState?.pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const Home(),
           ),

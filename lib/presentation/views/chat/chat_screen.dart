@@ -17,7 +17,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _textController = TextEditingController();
-
+  DateTime? _lastDisplayedDate;
   void _handleSubmitted(String text) {
     _textController.clear();
     final user = FirebaseAuth.instance.currentUser;
@@ -101,32 +101,91 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Color messageColor = isSender ? homeorange : Colors.grey;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: crossAxisAlignment,
-        children: [
-          Material(
-            borderRadius: BorderRadius.circular(8.0),
-            color: messageColor,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: InkWell(
-                onTap: () {},
-                child: Text(
-                  message.message,
-                  style: const TextStyle(color: kwhite, fontSize: 15),
-                ),
+    bool showDate = _shouldShowDate(message);
+
+    return Column(
+      crossAxisAlignment: crossAxisAlignment,
+      children: [
+        if (showDate)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Center(
+              child: Text(
+                _formatDate(message.timestamp),
+                style: const TextStyle(fontSize: 16.0, color: Colors.grey),
               ),
             ),
           ),
-          Text(
-            DateFormat('hh:mm a').format(message.timestamp),
-            style: const TextStyle(fontSize: 12.0, color: Colors.grey),
+        Material(
+          borderRadius: BorderRadius.circular(8.0),
+          color: messageColor,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: InkWell(
+              onTap: () {},
+              child: Text(
+                message.message,
+                style: const TextStyle(color: kwhite, fontSize: 15),
+              ),
+            ),
           ),
-        ],
-      ),
+        ),
+        Text(
+          DateFormat('hh:mm a').format(message.timestamp),
+          style: const TextStyle(fontSize: 12.0, color: Colors.grey),
+        ),
+      ],
     );
+  }
+
+  //   return Container(
+  //     margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+  //     child: Column(
+  //       crossAxisAlignment: crossAxisAlignment,
+  //       children: [
+  //         Material(
+  //           borderRadius: BorderRadius.circular(8.0),
+  //           color: messageColor,
+  //           child: Padding(
+  //             padding: const EdgeInsets.all(10.0),
+  //             child: InkWell(
+  //               onTap: () {},
+  //               child: Text(
+  //                 message.message,
+  //                 style: const TextStyle(color: kwhite, fontSize: 15),
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //         Text(
+  //           DateFormat('hh:mm a').format(message.timestamp),
+  //           style: const TextStyle(fontSize: 12.0, color: Colors.grey),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  bool _shouldShowDate(ChatMessage message) {
+    if (_lastDisplayedDate == null) {
+      _lastDisplayedDate = message.timestamp;
+      return true;
+    }
+    bool showDate = !isSameDay(_lastDisplayedDate!, message.timestamp);
+    _lastDisplayedDate = message.timestamp;
+
+    return showDate;
+  }
+
+  String _formatDate(DateTime dateTime) {
+    // Format the date according to your requirements
+    return DateFormat('MMMM d, y').format(dateTime);
+  }
+
+  bool isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
   }
 
   Widget _buildTextComposer() {

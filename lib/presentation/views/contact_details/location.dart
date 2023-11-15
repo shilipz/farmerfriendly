@@ -1,23 +1,38 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Location extends StatefulWidget {
-  const Location({super.key});
+  const Location({super.key, required this.latitude, required this.longitude});
+  final String latitude;
+  final String longitude;
 
   @override
   State<Location> createState() => LocationState();
 }
 
 class LocationState extends State<Location> {
+  CameraPosition? _kGooglePlex;
+
+  @override
+  void initState() {
+    generatemarker();
+    super.initState();
+    _kGooglePlex = CameraPosition(
+      target:
+          LatLng(double.parse(widget.latitude), double.parse(widget.longitude)),
+      zoom: 14.4746,
+    );
+  }
+
+  Set<Marker> marker = {};
+
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
 
   static const CameraPosition _kLake = CameraPosition(
       bearing: 192.8334901395799,
@@ -28,23 +43,44 @@ class LocationState extends State<Location> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: darkgreen,
+      ),
       body: GoogleMap(
-        mapType: MapType.hybrid,
-        initialCameraPosition: _kGooglePlex,
+        mapType: MapType.satellite,
+        markers: marker,
+        initialCameraPosition: _kGooglePlex ?? _kLake,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: const Text('To the lake!'),
-        icon: const Icon(Icons.directions_boat),
+        backgroundColor: darkgreen,
+        onPressed: () {
+          saveToFirebase(widget.latitude, widget.longitude);
+        },
+        label: const Text('Save Location'),
       ),
     );
   }
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  saveToFirebase(String latitude, String longitude) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+      "latitude": latitude,
+      "longitude": longitude,
+    });
+    Navigator.of(context).pop();
+  }
+
+  void generatemarker() {
+    marker.add(Marker(
+      markerId: const MarkerId('1'),
+      position:
+          LatLng(double.parse(widget.latitude), double.parse(widget.longitude)),
+      icon: BitmapDescriptor.defaultMarker,
+    ));
   }
 }

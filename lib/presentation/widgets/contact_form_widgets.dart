@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../main.dart';
 import '../../utils/constants/constants.dart';
 
 class ContactForm extends StatelessWidget {
@@ -67,8 +66,7 @@ class Next extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: 90,
-        height: 40,
+        // height: 40,
         child: ElevatedButton(
           onPressed: onPressed,
           style: ButtonStyle(
@@ -99,7 +97,39 @@ class Captions extends StatelessWidget {
         style: GoogleFonts.playfairDisplay(
             textStyle: TextStyle(
                 color: captionColor,
-                fontSize: 28,
+                fontSize: 24,
                 fontWeight: FontWeight.bold)));
+  }
+}
+
+class ProfileEdit extends StatelessWidget {
+  final String? label;
+  final String? text;
+  final IconData? icons;
+  final Function()? onpressed;
+  const ProfileEdit({
+    super.key,
+    this.label,
+    this.text,
+    this.icons,
+    this.onpressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(icons),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label!,
+            style: const TextStyle(color: Colors.grey),
+          ),
+          Text(text ?? '')
+        ],
+      ),
+      trailing: IconButton(onPressed: onpressed, icon: const Icon(Icons.edit)),
+    );
   }
 }

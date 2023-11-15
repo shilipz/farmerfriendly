@@ -2,7 +2,8 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cucumber_app/main.dart';
 import 'package:cucumber_app/presentation/views/contact_details/current_location.dart';
-import 'package:cucumber_app/presentation/views/contact_details/location.dart';
+
+import 'package:cucumber_app/presentation/views/signing/login.dart';
 import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
 import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
@@ -10,7 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ContactDetails extends StatefulWidget {
-  ContactDetails({super.key});
+  const ContactDetails({super.key});
 
   @override
   State<ContactDetails> createState() => _ContactDetailsState();
@@ -163,6 +164,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                               if (_formkey.currentState!.validate()) {
                                 return addUserDetails(context);
                               }
+                              log('message');
                             },
                             buttonText: 'Save',
                             buttonColor: darkgreen),
@@ -193,37 +195,21 @@ class _ContactDetailsState extends State<ContactDetails> {
 
   Future<void> addUserDetails(BuildContext context) async {
     log('1');
-    // UserModel userModel = UserModel(
-    //     fullName: formatText(nameController.text),
-    //     phoneNumber: formatText(phoneNumberController.text),
-    //     houseName: formatText(farmNameController.text),
-    //     streetName: formatText(streetNameController.text),
-    //     landmark: formatText(landMarkController.text));
+
     User? user = FirebaseAuth.instance.currentUser;
-    // final details =
-    //     FirebaseFirestore.instance.collection('users').doc(user!.uid);
-    // details.add(userModel.toMap());
 
     String fullName = formatText(nameController.text);
     String phoneNumber = formatText(phoneNumberController.text);
     String houseName = formatText(farmNameController.text);
     String streetName = formatText(streetNameController.text);
     String landmark = formatText(landMarkController.text);
-    // var pincode = pincodeController;
 
-    // Map<String, dynamic> userMap = userModel.toMap();
+    var userDocRef =
+        FirebaseFirestore.instance.collection('users').doc(user!.uid);
 
-    // Update the Firestore document with the user's data
-    // await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(user!.uid)
-    //     .set(userMap, SetOptions(merge: true));
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(user!.uid)
-        .collection('contact_details')
-        .doc()
-        .set({
+    // .collection('contact_details')
+    // .doc()
+    await userDocRef.update({
       'fullname': fullName,
       'phoneNumber': phoneNumber,
       'houseName': houseName,
@@ -231,8 +217,15 @@ class _ContactDetailsState extends State<ContactDetails> {
       'landmark': landmark,
       // 'pincode': pincode,
     });
+    // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Contact details saved successfully')));
+        const SnackBar(content: Text('Profile created  successfully')));
+    navigatorKey.currentState?.pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => Login(),
+      ),
+      (route) => false,
+    );
   }
 
   String formatText(String text) {

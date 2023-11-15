@@ -1,4 +1,6 @@
+import 'package:cucumber_app/main.dart';
 import 'package:cucumber_app/presentation/views/signing/login.dart';
+import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
 import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,19 +13,85 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: lightgreen,
-      body: Column(
-        children: [
-          const Arrowback(backcolor: kblack),
-          TextButton(
-              onPressed: () {
-                showAlertDialog(context);
-              },
-              child: const Text(
-                'Signout',
-                style: TextStyle(color: kwhite, fontSize: 20),
-              ))
-        ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(
+                children: [
+                  Arrowback(backcolor: darkgreen),
+                  Captions(captionColor: darkgreen, captions: 'Settings')
+                ],
+              ),
+              Container(
+                height: screenHeight,
+                width: screenWidth,
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: AlignmentDirectional.topStart,
+                        end: Alignment.bottomCenter,
+                        colors: [kwhite, lightgreen])),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.share,
+                            color: darkgreen,
+                          ),
+                          TextButton(
+                              onPressed: () {},
+                              child: const Text(
+                                'Share',
+                                style:
+                                    TextStyle(color: darkgreen, fontSize: 16),
+                              )),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.edit_document,
+                            color: darkgreen,
+                          ),
+                          TextButton(
+                              onPressed: () {},
+                              child: const Text(
+                                'About',
+                                style:
+                                    TextStyle(color: darkgreen, fontSize: 16),
+                              )),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.logout,
+                            color: darkgreen,
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                showAlertDialog(context);
+                              },
+                              child: const Text(
+                                'Signout',
+                                style:
+                                    TextStyle(color: darkgreen, fontSize: 16),
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     ));
   }
@@ -32,14 +100,14 @@ class SettingScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sign Out'),
+        title: const Text('Sign-out'),
         content: const Text('Are you sure you want to sign out?'),
         actions: <Widget>[
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
               onPressed: () {
@@ -50,7 +118,7 @@ class SettingScreen extends StatelessWidget {
                   (Route<dynamic> route) => false,
                 );
               },
-              child: const Text('Sign Out'))
+              child: const Text('Sign out'))
         ],
       ),
     );
