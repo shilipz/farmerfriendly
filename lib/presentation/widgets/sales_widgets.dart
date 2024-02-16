@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../../main.dart';
@@ -35,7 +35,7 @@ class QuantityButton extends StatelessWidget {
           child: Container(
             width: 40,
             height: 40,
-            color: transOrange,
+            color: Colors.yellow,
             child: IconButton(
               onPressed: onpressed,
               icon: Icon(
@@ -58,10 +58,13 @@ class SalesContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: const BoxDecoration(
-            color: kwhite, borderRadius: BorderRadius.all(Radius.circular(20))),
+            color: Colors.yellow,
+            borderRadius: BorderRadius.all(Radius.circular(20))),
         width: screenWidth * 0.15,
         height: screenHeight * 0.04,
-        child: Center(child: Text(saleText, style: commonText)));
+        child: Center(
+            child: Text(saleText,
+                style: const TextStyle(color: kblack, fontSize: 18))));
   }
 }
 

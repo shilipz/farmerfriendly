@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,7 +17,7 @@ class PendingVeggies extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: kwhite,
+        backgroundColor: Colors.yellow[100],
         body: Column(
           children: [
             sheight,
@@ -26,7 +26,7 @@ class PendingVeggies extends StatelessWidget {
               child: Text(
                 'Under review',
                 style: GoogleFonts.akshar(
-                  textStyle: const TextStyle(color: darkgreen, fontSize: 20),
+                  textStyle: const TextStyle(color: kblack, fontSize: 20),
                 ),
               ),
             ),
@@ -53,6 +53,8 @@ class PendingVeggies extends StatelessWidget {
                       itemBuilder: (context, index) {
                         var vegetable = pendingApproval[index];
                         var name = vegetable['name'];
+                        var vegetableId = vegetable.id;
+
                         var price = vegetable['price'];
 
                         var imageUrl = vegetable['imageUrl'] ?? '';
@@ -65,13 +67,14 @@ class PendingVeggies extends StatelessWidget {
                               height: 70,
                               child: imageUrl.isNotEmpty
                                   ? Image.network(imageUrl)
-                                  : Image.asset('assets/images.jpeg'),
+                                  : Image.asset('assets/farmer.jpg'),
                             ),
                             title: Text(name),
                             subtitle: Text('$price per Kg'),
                             trailing: IconButton(
                               onPressed: () {
-                                // Edit action
+                                _showEditOptions(context,
+                                    vegetableId: vegetableId);
                               },
                               icon: const Icon(Icons.edit),
                             ),
@@ -88,4 +91,44 @@ class PendingVeggies extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showEditOptions(BuildContext context, {required String vegetableId}) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          // ListTile(
+          //   leading: const Icon(Icons.edit),
+          //   title: const Text('Edit Image'),
+          //   onTap: () {
+          //     Navigator.pop(context); // Close the bottom sheet
+          //     _editImage(context, vegetableId);
+          //   },
+          // ),
+          ListTile(
+            leading: const Icon(Icons.delete),
+            title: const Text('Remove Vegetable'),
+            onTap: () {
+              Navigator.pop(context); // Close the bottom sheet
+              _removeVegetable(context, vegetableId);
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+// void _editImage(BuildContext context, String vegetableId) {
+//   // Implement the logic for editing the image here
+// }
+
+void _removeVegetable(BuildContext context, String vegetableId) {
+  FirebaseFirestore.instance
+      .collection('pending_approval')
+      .doc(vegetableId)
+      .delete();
 }

@@ -1,6 +1,6 @@
-import 'package:cucumber_app/main.dart';
-import 'package:cucumber_app/presentation/views/contact_details/location.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/main.dart';
+import 'package:FarmerFriendly/presentation/views/contact_details/location.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -121,7 +121,10 @@ class _CurrentLocationState extends State<CurrentLocation> {
                     },
                   ));
                 },
-                child: const Text('Get Current Location'),
+                child: const Text(
+                  'Get Current Location',
+                  style: TextStyle(color: kwhite),
+                ),
               ),
               ElevatedButton(
                   style: ButtonStyle(
@@ -134,7 +137,8 @@ class _CurrentLocationState extends State<CurrentLocation> {
                   onPressed: () {
                     _openMap(lat!, long!);
                   },
-                  child: const Text('Open Google Map'))
+                  child: const Text('Open Google Map',
+                      style: TextStyle(color: kwhite)))
             ],
           ),
         ),

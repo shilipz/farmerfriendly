@@ -1,18 +1,18 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:developer';
-
+import 'package:FarmerFriendly/main.dart';
+import 'package:FarmerFriendly/presentation/views/settings/settings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cucumber_app/presentation/views/chat/chat_screen.dart';
-import 'package:cucumber_app/presentation/views/contact_details/contact_profile.dart';
-import 'package:cucumber_app/presentation/views/home/home_screen_widget.dart';
-import 'package:cucumber_app/presentation/views/payment/payment.dart';
-import 'package:cucumber_app/presentation/views/payment/payment_profile.dart';
-import 'package:cucumber_app/presentation/views/product/product_homescreen.dart';
-import 'package:cucumber_app/presentation/views/sales/sales_history.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:FarmerFriendly/presentation/views/contact_details/contact_profile.dart';
+import 'package:FarmerFriendly/presentation/views/product/product_homescreen.dart';
+import 'package:FarmerFriendly/presentation/views/sales/sales_history.dart';
+import 'package:FarmerFriendly/presentation/widgets/contact_form_widgets.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MainSreensNav extends StatelessWidget {
   const MainSreensNav({
@@ -21,71 +21,58 @@ class MainSreensNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const adminId = 'CxAvaCCbfQWkYJAADFogtJNbL1t1';
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          InkWell(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const ProductsHomescreen())),
-              child: const HomeContainer(
-                title: 'Product Selection',
-                subtitle: 'Add products for your next sale',
-              )),
-          sheight,
-          InkWell(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ContactProfile(),
-                  )),
-              child: const HomeContainer(
-                title: 'Contact Details',
-                subtitle: 'Add/update collection address',
-              )),
-          sheight,
-          InkWell(
-              onTap: () async {
-                bool hasPaymentSubcollection =
-                    await checkPaymentSubcollection();
-                if (hasPaymentSubcollection) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => PaymentProfile(),
-                  ));
-                } else {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Payment(),
-                  ));
-                }
+      child: Padding(
+        padding: const EdgeInsets.all(19),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const ProductsHomescreen(),
+                ));
               },
-              child: const HomeContainer(
-                title: 'Payment Details',
-                subtitle: 'Add/edit payment profile',
-              )),
-          sheight,
-          InkWell(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const SalesHistory(),
-                  )),
-              child: const HomeContainer(
-                title: 'Sales History',
-                subtitle: 'See previous sales history',
-              )),
-          sheight,
-          InkWell(
-              onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const ChatScreen(adminId: adminId)),
+              child: Hometiles(
+                heading: "Shall we add some sales today??",
+                subheading: 'Click to schedule next sale',
+              ),
+            ),
+            lheight,
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ContactProfile(),
+                ));
+              },
+              child: Hometiles(
+                  heading: "Is your contact details up-to-date?",
+                  subheading: 'Click to add/update contact details'),
+            ),
+            lheight,
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => SalesHistory(
+                    docId: FirebaseAuth.instance.currentUser!.uid,
                   ),
-              child: const HomeContainer(
-                title: 'Chat Support',
-                subtitle: 'Talk to our customer executive',
-              )),
-          lheight,
-          lheight,
-          lheight,
-          lheight
-        ],
+                ));
+              },
+              child: Hometiles(
+                  heading: "How is our sales so far?",
+                  subheading: "Click to see sales history"),
+            ),
+            lheight,
+            InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const SettingScreen(),
+                  ));
+                },
+                child: Hometiles(
+                    heading: 'Learn more about us', subheading: 'Settings'))
+          ],
+        ),
       ),
     );
   }
@@ -104,5 +91,40 @@ class MainSreensNav extends StatelessWidget {
     }
     log('payment2');
     return false;
+  }
+}
+
+class Hometiles extends StatelessWidget {
+  String heading;
+  String subheading;
+
+  Hometiles({
+    Key? key,
+    required this.heading,
+    required this.subheading,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: screenHeight * 0.15,
+      width: double.infinity,
+      decoration: BoxDecoration(
+          color: Colors.green[300],
+          borderRadius: const BorderRadius.all(Radius.circular(20))),
+      child: Column(
+        children: [
+          SizedBox(height: screenHeight * 0.011),
+          Text(heading,
+              style: GoogleFonts.abyssinicaSil(
+                  textStyle: const TextStyle(
+                      color: kwhite,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold))),
+          sheight,
+          Next(buttonText: subheading, buttonColor: Colors.yellow.shade500),
+        ],
+      ),
+    );
   }
 }

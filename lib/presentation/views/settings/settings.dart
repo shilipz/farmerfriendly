@@ -1,8 +1,9 @@
-import 'package:cucumber_app/main.dart';
-import 'package:cucumber_app/presentation/views/signing/login.dart';
-import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
-import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/main.dart';
+import 'package:FarmerFriendly/presentation/views/settings/about.dart';
+import 'package:FarmerFriendly/presentation/views/signing/login.dart';
+import 'package:FarmerFriendly/presentation/widgets/contact_form_widgets.dart';
+import 'package:FarmerFriendly/presentation/widgets/signing_widgets.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -14,25 +15,25 @@ class SettingScreen extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
+        child: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(colors: [Colors.green, Colors.teal])),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
-                children: [
-                  Arrowback(backcolor: darkgreen),
-                  Captions(captionColor: darkgreen, captions: 'Settings')
-                ],
+              const Padding(
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Arrowback(backcolor: kwhite),
+                    Captions(captionColor: kwhite, captions: 'Settings')
+                  ],
+                ),
               ),
               Container(
                 height: screenHeight,
                 width: screenWidth,
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: AlignmentDirectional.topStart,
-                        end: Alignment.bottomCenter,
-                        colors: [kwhite, lightgreen])),
+                color: Colors.yellow[100],
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Column(
@@ -42,14 +43,13 @@ class SettingScreen extends StatelessWidget {
                         children: [
                           const Icon(
                             Icons.share,
-                            color: darkgreen,
+                            color: kblack,
                           ),
                           TextButton(
                               onPressed: () {},
                               child: const Text(
                                 'Share',
-                                style:
-                                    TextStyle(color: darkgreen, fontSize: 16),
+                                style: TextStyle(color: kblack, fontSize: 16),
                               )),
                         ],
                       ),
@@ -57,14 +57,16 @@ class SettingScreen extends StatelessWidget {
                         children: [
                           const Icon(
                             Icons.edit_document,
-                            color: darkgreen,
+                            color: kblack,
                           ),
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const AboutScreen()));
+                              },
                               child: const Text(
                                 'About',
-                                style:
-                                    TextStyle(color: darkgreen, fontSize: 16),
+                                style: TextStyle(color: kblack, fontSize: 16),
                               )),
                         ],
                       ),
@@ -72,7 +74,7 @@ class SettingScreen extends StatelessWidget {
                         children: [
                           const Icon(
                             Icons.logout,
-                            color: darkgreen,
+                            color: kblack,
                           ),
                           TextButton(
                               onPressed: () {
@@ -80,8 +82,7 @@ class SettingScreen extends StatelessWidget {
                               },
                               child: const Text(
                                 'Signout',
-                                style:
-                                    TextStyle(color: darkgreen, fontSize: 16),
+                                style: TextStyle(color: kblack, fontSize: 16),
                               )),
                         ],
                       ),

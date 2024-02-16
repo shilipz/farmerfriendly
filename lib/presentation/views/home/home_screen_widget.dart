@@ -1,5 +1,5 @@
-import 'package:cucumber_app/main.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/main.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class HomeContainer extends StatelessWidget {
@@ -25,8 +25,8 @@ class HomeContainer extends StatelessWidget {
               Text(title,
                   style: const TextStyle(
                       fontSize: 23,
-                      color: darkgreen,
-                      fontWeight: FontWeight.w400)),
+                      color: kblack,
+                      fontWeight: FontWeight.w500)),
               Text(subtitle ?? "")
             ],
           ),

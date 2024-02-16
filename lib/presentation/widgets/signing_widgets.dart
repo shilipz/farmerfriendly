@@ -1,9 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cucumber_app/presentation/views/contact_details/contact_details.dart';
-import 'package:cucumber_app/presentation/views/home/home_screen.dart';
-import 'package:cucumber_app/utils/authentication.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/presentation/views/contact_details/contact_details.dart';
+import 'package:FarmerFriendly/presentation/views/home/home_screen.dart';
+import 'package:FarmerFriendly/utils/authentication.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -51,11 +51,11 @@ class Forms extends StatelessWidget {
           filled: true,
           fillColor: Colors.grey[300],
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
           ),
           border: InputBorder.none,
@@ -83,14 +83,14 @@ class SignUpButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(lightgreen),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(10),
             ))),
         child: Text(
           buttonText,
-          style: const TextStyle(fontSize: 18),
+          style: const TextStyle(fontSize: 18, color: kwhite),
         ),
       ),
     );
@@ -200,7 +200,7 @@ class LoginHeading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(signingText,
-        style: GoogleFonts.playfairDisplay(
+        style: GoogleFonts.aboreto(
             textStyle: TextStyle(
                 color: textcolor, fontSize: 36, fontWeight: FontWeight.bold)));
   }

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cucumber_app/main.dart';
-import 'package:cucumber_app/presentation/views/contact_details/current_location.dart';
-import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
-import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/main.dart';
+import 'package:FarmerFriendly/presentation/views/contact_details/current_location.dart';
+import 'package:FarmerFriendly/presentation/widgets/contact_form_widgets.dart';
+import 'package:FarmerFriendly/presentation/widgets/signing_widgets.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -93,33 +93,22 @@ class ContactProfile extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
+          child: Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(colors: [Colors.green, Colors.teal])),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: screenWidth * 0.1),
-                      child: const Arrowback(backcolor: darkgreen),
-                    ),
-                    const Captions(
-                        captions: 'Profile', captionColor: darkgreen),
-                  ],
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Row(children: [
+                    Arrowback(backcolor: kwhite),
+                    Captions(captions: 'Contact Details', captionColor: kwhite)
+                  ]),
                 ),
                 Container(
                   height: screenHeight,
                   width: screenWidth,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: AlignmentDirectional.topStart,
-                        end: Alignment.bottomCenter,
-                        colors: [kwhite, lightgreen]),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40),
-                      topRight: Radius.circular(40),
-                    ),
-                  ),
+                  color: Colors.yellow[100],
                   child: Padding(
                     padding: const EdgeInsets.all(25),
                     child: FutureBuilder(
@@ -146,24 +135,22 @@ class ContactProfile extends StatelessWidget {
 
                         final userData =
                             snapshot.data!.data() as Map<String, dynamic>;
-                        var fullName =
-                            userData['fullname']?.toString() ?? 'N/A';
-                        var phoneNumber =
-                            userData['phoneNumber']?.toString() ?? 'N/A';
-                        var houseName =
-                            userData['houseName']?.toString() ?? 'N/A';
-                        var streetName =
-                            userData['streetName']?.toString() ?? 'N/A';
-                        var landmark =
-                            userData['landmark']?.toString() ?? 'N/A';
+                        var fullName = userData['fullname']?.toString() ??
+                            'Provide full name ';
+                        var phoneNumber = userData['phoneNumber']?.toString() ??
+                            'Add phone number';
+                        var houseName = userData['houseName']?.toString() ??
+                            'Provide address details';
+
+                        var landmark = userData['landmark']?.toString() ??
+                            'provide a landmark';
 
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Contact Details',
-                                style:
-                                    TextStyle(fontSize: 18, color: darkgreen)),
-                            sheight,
+                            // const Text('Contact Details',
+                            //     style: TextStyle(fontSize: 18, color: kwhite)),
+                            // sheight,
                             //------------------------------contact---------------------------------------
                             ProfileEdit(
                                 icons: Icons.person,
@@ -184,27 +171,26 @@ class ContactProfile extends StatelessWidget {
                                 text: phoneNumber),
                             sheight,
                             const Text('Address for Collection',
-                                style:
-                                    TextStyle(fontSize: 18, color: darkgreen)),
+                                style: TextStyle(fontSize: 18, color: kblack)),
                             sheight,
                             ProfileEdit(
                                 icons: Icons.house,
-                                label: 'Farm/House name',
+                                label: 'Farm/House Address',
                                 onpressed: () {
                                   _openEditBottomSheet(
                                       context, 'house name', houseName);
                                 },
                                 text: houseName),
                             sheight,
-                            ProfileEdit(
-                                icons: Icons.streetview,
-                                label: 'Street name',
-                                onpressed: () {
-                                  _openEditBottomSheet(
-                                      context, 'street name', streetName);
-                                },
-                                text: streetName),
-                            sheight,
+                            // ProfileEdit(
+                            //     icons: Icons.streetview,
+                            //     label: 'Street name',
+                            //     onpressed: () {
+                            //       _openEditBottomSheet(
+                            //           context, 'street name', streetName);
+                            //     },
+                            //     text: streetName),
+                            // sheight,
                             ProfileEdit(
                                 icons: Icons.landscape,
                                 label: 'Landmark',
@@ -222,8 +208,15 @@ class ContactProfile extends StatelessWidget {
                             sheight,
 
                             SizedBox(height: screenHeight * 0.01),
+                            const Center(
+                                child: Icon(
+                              Icons.location_pin,
+                              color: Colors.red,
+                              size: 32,
+                            )),
+                            sheight,
                             Center(
-                              child: IconButton(
+                              child: Next(
                                   onPressed: () {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
@@ -231,11 +224,8 @@ class ContactProfile extends StatelessWidget {
                                           const CurrentLocation(),
                                     ));
                                   },
-                                  icon: const Icon(
-                                    Icons.location_pin,
-                                    color: Colors.red,
-                                    size: 32,
-                                  )),
+                                  buttonText: 'Click to add location in  map',
+                                  buttonColor: kwhite),
                             )
                           ],
                         );

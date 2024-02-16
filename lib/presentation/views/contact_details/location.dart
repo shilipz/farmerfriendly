@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -59,7 +59,7 @@ class LocationState extends State<Location> {
         onPressed: () {
           saveToFirebase(widget.latitude, widget.longitude);
         },
-        label: const Text('Save Location'),
+        label: const Text('Save Location', style: TextStyle(color: kwhite)),
       ),
     );
   }

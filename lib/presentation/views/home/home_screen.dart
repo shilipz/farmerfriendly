@@ -1,13 +1,14 @@
+import 'dart:developer';
+import 'package:FarmerFriendly/presentation/views/chat/chat_screen.dart';
+import 'package:FarmerFriendly/presentation/views/settings/settings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cucumber_app/domain/models/user_model.dart';
-import 'package:cucumber_app/main.dart';
-import 'package:cucumber_app/presentation/views/home/main_screens_nav.dart';
-import 'package:cucumber_app/presentation/views/settings.dart';
-import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/domain/models/user_model.dart';
+import 'package:FarmerFriendly/main.dart';
+import 'package:FarmerFriendly/presentation/views/home/main_screens_nav.dart';
+import 'package:FarmerFriendly/presentation/widgets/contact_form_widgets.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:rive/rive.dart';
 
 class Home extends StatelessWidget {
   final String? receiverId;
@@ -30,54 +31,68 @@ class Home extends StatelessWidget {
     }
 
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: kwhite,
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Positioned.fill(
-                child: Image.asset('assets/signin.png', fit: BoxFit.fill)),
-            IconButton(
-                color: kwhite,
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const SettingScreen(),
-                  ));
-                },
-                icon: const Icon(Icons.settings, size: 32)),
-            FutureBuilder<UserModel>(
-              future: _getUserData(user!.uid),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error ${snapshot.error}'));
-                } else if (!snapshot.hasData) {
-                  return const Center(child: Text("user not found"));
-                } else {
-                  var userData = snapshot.data;
-                  var username = userData?.username;
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            bottom: screenHeight * 0.1,
-                            top: screenHeight * 0.1),
-                        child: Captions(
-                            captionColor: kwhite,
-                            captions: '$greeting , $username'),
-                      ),
-                      const MainSreensNav(),
-                      lheight
-                    ],
-                  );
-                }
-              },
-            )
-          ],
+      child: Scaffold(
+        backgroundColor: kwhite,
+        body: FutureBuilder<UserModel>(
+          future: _getUserData(user!.uid),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error ${snapshot.error}'));
+            } else if (!snapshot.hasData) {
+              return const Center(child: Text("user not found"));
+            } else {
+              var userData = snapshot.data;
+              var username = userData?.username;
+              return Container(
+                height: screenHeight,
+                decoration: const BoxDecoration(
+                    gradient:
+                        LinearGradient(colors: [Colors.green, Colors.teal])),
+                child: Padding(
+                  padding: EdgeInsets.only(top: screenHeight * 0.03),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: WelcomeCaptions(
+                              captionColor: kwhite,
+                              captions: '$greeting , $username'),
+                        ),
+
+                        SizedBox(
+                            height: screenHeight * .23,
+                            width: screenWidth * 0.9,
+                            child: Image.asset('assets/farmernobg.png')),
+                        // SizedBox(height: screenHeight * 0.09),
+                        const MainSreensNav(),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+          },
         ),
+        floatingActionButton: IconButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ChatScreen(),
+              ));
+            },
+            icon: const CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 28,
+              child: Icon(
+                Icons.message,
+                color: Colors.green,
+                size: 32,
+              ),
+            )),
       ),
-    ));
+    );
   }
 
   Future<UserModel> _getUserData(String? uid) async {
@@ -86,14 +101,5 @@ class Home extends StatelessWidget {
     var userData = userSnapshot.data() as Map<String, dynamic>;
 
     return UserModel(uid: uid, username: userData['username']);
-  }
-
-  showLoading(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const RiveAnimation.asset('assets/6334-12291-searching.riv');
-      },
-    );
   }
 }

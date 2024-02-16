@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cucumber_app/domain/functions/function.dart';
+import 'package:FarmerFriendly/domain/functions/function.dart';
 
 part 'product_search_event.dart';
 part 'product_search_state.dart';

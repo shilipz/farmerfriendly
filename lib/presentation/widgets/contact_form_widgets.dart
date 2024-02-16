@@ -70,14 +70,14 @@ class Next extends StatelessWidget {
         child: ElevatedButton(
           onPressed: onPressed,
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(buttonColor),
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
               ))),
           child: Text(
             buttonText,
-            style: const TextStyle(fontSize: 18, color: kwhite),
+            style: const TextStyle(fontSize: 18, color: kblack),
           ),
         ),
       ),
@@ -102,6 +102,23 @@ class Captions extends StatelessWidget {
   }
 }
 
+class WelcomeCaptions extends StatelessWidget {
+  final String captions;
+  final Color captionColor;
+  const WelcomeCaptions(
+      {required this.captionColor, required this.captions, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(captions,
+        style: GoogleFonts.aboreto(
+            textStyle: TextStyle(
+                color: captionColor,
+                fontSize: 30,
+                fontWeight: FontWeight.bold)));
+  }
+}
+
 class ProfileEdit extends StatelessWidget {
   final String? label;
   final String? text;
@@ -118,18 +135,27 @@ class ProfileEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icons),
+      leading: Icon(
+        icons,
+        color: kblack,
+      ),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label!,
-            style: const TextStyle(color: Colors.grey),
+            label ?? '',
+            style: const TextStyle(
+                color: kblack, fontSize: 18, fontWeight: FontWeight.w600),
           ),
           Text(text ?? '')
         ],
       ),
-      trailing: IconButton(onPressed: onpressed, icon: const Icon(Icons.edit)),
+      trailing: IconButton(
+          onPressed: onpressed,
+          icon: const Icon(
+            Icons.edit,
+            color: kblack,
+          )),
     );
   }
 }

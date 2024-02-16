@@ -1,12 +1,12 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cucumber_app/main.dart';
-import 'package:cucumber_app/presentation/views/contact_details/current_location.dart';
+import 'package:FarmerFriendly/main.dart';
+import 'package:FarmerFriendly/presentation/views/contact_details/current_location.dart';
 
-import 'package:cucumber_app/presentation/views/signing/login.dart';
-import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
-import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/presentation/views/signing/login.dart';
+import 'package:FarmerFriendly/presentation/widgets/contact_form_widgets.dart';
+import 'package:FarmerFriendly/presentation/widgets/signing_widgets.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -159,15 +159,6 @@ class _ContactDetailsState extends State<ContactDetails> {
                         const Text('also pin your location on map',
                             style: TextStyle(fontSize: 18, color: darkgreen)),
                         SizedBox(height: screenHeight * 0.01),
-                        Next(
-                            onPressed: () {
-                              if (_formkey.currentState!.validate()) {
-                                return addUserDetails(context);
-                              }
-                              log('message');
-                            },
-                            buttonText: 'Save',
-                            buttonColor: darkgreen),
                         Center(
                           child: IconButton(
                               onPressed: () {
@@ -181,6 +172,18 @@ class _ContactDetailsState extends State<ContactDetails> {
                                 color: Colors.red,
                               )),
                         ),
+                        Next(
+                            onPressed: () {
+                              if (_formkey.currentState!.validate()) {
+                                addUserDetails(context);
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //   builder: (context) => const CurrentLocation(),
+                                // ));
+                              }
+                              log('message');
+                            },
+                            buttonText: 'Save',
+                            buttonColor: darkgreen),
                       ],
                     ),
                   ),
@@ -218,14 +221,15 @@ class _ContactDetailsState extends State<ContactDetails> {
       // 'pincode': pincode,
     });
     // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile created  successfully')));
-    navigatorKey.currentState?.pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => Login(),
-      ),
-      (route) => false,
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Profile created successfully')),
+      );
+      navigatorKey.currentState?.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => Login()),
+        (route) => false,
+      );
+    }
   }
 
   String formatText(String text) {

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
+import 'package:FarmerFriendly/domain/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cucumber_app/domain/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 // /---------------signUp---------------------------

@@ -1,5 +1,5 @@
-import 'package:cucumber_app/main.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/main.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class SalesProfile extends StatelessWidget {

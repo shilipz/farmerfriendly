@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cucumber_app/main.dart';
-import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
-import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/main.dart';
+import 'package:FarmerFriendly/presentation/widgets/contact_form_widgets.dart';
+import 'package:FarmerFriendly/presentation/widgets/signing_widgets.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -80,17 +80,16 @@ class PaymentProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
+        body: Padding(
+          padding: const EdgeInsets.all(10),
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 const Row(
                   children: [
-                    Arrowback(backcolor: darkgreen),
+                    Arrowback(backcolor: kblack),
                     Captions(
-                        captions: 'Payment Information',
-                        captionColor: darkgreen),
+                        captions: 'Payment Information', captionColor: kblack),
                   ],
                 ),
                 Container(
@@ -100,7 +99,7 @@ class PaymentProfile extends StatelessWidget {
                     gradient: LinearGradient(
                         begin: AlignmentDirectional.topStart,
                         end: Alignment.bottomCenter,
-                        colors: [kwhite, lightgreen]),
+                        colors: [kwhite, Colors.grey]),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
                       topRight: Radius.circular(40),
@@ -142,8 +141,7 @@ class PaymentProfile extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text("Bank Details",
-                                style:
-                                    TextStyle(fontSize: 18, color: darkgreen)),
+                                style: TextStyle(fontSize: 18, color: kblack)),
                             sheight,
                             sheight,
                             ListTile(

@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
-import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
-import 'package:cucumber_app/utils/constants/constants.dart';
+import 'package:FarmerFriendly/presentation/widgets/contact_form_widgets.dart';
+import 'package:FarmerFriendly/presentation/widgets/signing_widgets.dart';
+import 'package:FarmerFriendly/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +99,7 @@ class _ApprovalsState extends State<Approvals> {
                 const SizedBox(height: 20),
                 Center(
                   child: SizedBox(
-                    width: 90,
+                    // width: 90,
                     height: 40,
                     child: ElevatedButton(
                       onPressed: () {
@@ -108,7 +108,7 @@ class _ApprovalsState extends State<Approvals> {
                       },
                       style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all<Color>(lightgreen),
+                              MaterialStateProperty.all<Color>(Colors.yellow),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -116,7 +116,7 @@ class _ApprovalsState extends State<Approvals> {
                           ))),
                       child: const Text(
                         'Done',
-                        style: TextStyle(fontSize: 18, color: kwhite),
+                        style: TextStyle(fontSize: 18, color: kblack),
                       ),
                     ),
                   ),
